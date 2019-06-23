@@ -1,7 +1,7 @@
 
 const express = require('express');
 const helmet = require('helmet');
-// const apiRoute = require('./routes/api/index.js');
+const apiRoute = require('../routes/api/index.js');
 const server = express();
 
 server.use(express.json());
@@ -14,6 +14,6 @@ server.get('/', (req, res) => {
     `);
 });
 
-// server.use('/api', apiRoute);
+server.use('/api', apiRoute);
 
 module.exports = server;
