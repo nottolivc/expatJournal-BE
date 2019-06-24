@@ -26,6 +26,37 @@ router.get('/byUser/:id', (req, res) => {
 
 })
 
+router.post('/new', (req, res) => {
+    const { sName, sContent, user } = req.body;
+    db.newStory({ sName, sContent, user })
+        .then(ids => {
+            res.status(201).json(ids);
+        })
+        .catch(err => {
+            res.status(500).json(err);
+        });
+});
+
+router.put('/update/:id', (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+    db.update(id, changes)
+        .then(count => {
+            res.status(200).json(count);
+        })
+        .catch(err => {
+            res.status(500).json(err);
+        });
+});
+
+router.delete('/delete/:id', (req, res) => {
+    const { id } = req.params;
+    db.remove(id)
+        .then(count => {
+            res.status(200).json({ Message: `Deleted Project #${count}` });
+        });
+});
+
 // router.get('/with/actions/:id', (req, res) => {
 //     db.getBoth(req.params.id)
 //         .then(function (data) {

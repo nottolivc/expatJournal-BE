@@ -6,12 +6,17 @@ module.exports = {
     findStories,
     findStoryByUser,
     findStoryById,
-    getProject,
-    getActions,
-    getBoth,
-    insert,
+    newStory,
     update,
-    remove
+    remove,
+    find,
+    findBy,
+    add,
+    findById
+    // getProject,
+    // getActions,
+    // getBoth,
+    // insert
 };
 
 function findStories() {
@@ -24,11 +29,6 @@ function findStoryById(id) {
         .first();
 }
 
-// function findStoryByUser(id) {
-//     return db('stories')
-//         .where({ user: id })
-//         .first();
-// }
 
 function findStoryByUser(id) {
     return db('stories')
@@ -37,45 +37,74 @@ function findStoryByUser(id) {
         .where({ user: id })
 }
 
-
-function getProject(id) {
-    return db('projects')
-        .select(['*'])
-        .from('projects')
-        .where({ id: id });
-}
-
-function getActions(id) {
-    return db('actions')
-        .select('id', 'actions.description', 'notes', 'completed')
-        .from('actions')
-        .where({ action_id: id });
-
-}
-
-async function getBoth(id) {
-    let a = await getProject(id);
-    let b = await getActions(id);
-    return {
-        ...a,
-        actions: b
-    };
-}
-
-function insert(project) {
-    return db('projects')
-        .insert(project)
+function newStory(story) {
+    return db('stories')
+        .insert(story)
         .then(ids => ({ id: ids[0] }));
 }
 
-function update(id, project) {
-    return db('projects')
+function update(id, story) {
+    return db('stories')
         .where({ id: id })
-        .update(project);
+        .update(story);
 }
 
 function remove(id) {
-    return db('projects')
+    return db('stories')
         .where({ id: id })
         .del();
 }
+
+function find() {
+    return db('users').select('id', 'username', 'password');
+}
+
+function findBy(filter) {
+    return db('users').where(filter);
+}
+
+function add(user) {
+    return db('users')
+        .insert(user, 'id')
+        .then(ids => {
+            const [id] = ids;
+            return findById(id);
+        });
+}
+
+function findById(id) {
+    return db('users')
+        .where({ id })
+        .first();
+}
+
+
+// function getProject(id) {
+//     return db('projects')
+//         .select(['*'])
+//         .from('projects')
+//         .where({ id: id });
+// }
+
+// function getActions(id) {
+//     return db('actions')
+//         .select('id', 'actions.description', 'notes', 'completed')
+//         .from('actions')
+//         .where({ action_id: id });
+
+// }
+
+// async function getBoth(id) {
+//     let a = await getProject(id);
+//     let b = await getActions(id);
+//     return {
+//         ...a,
+//         actions: b
+//     };
+// }
+
+// function insert(project) {
+//     return db('projects')
+//         .insert(project)
+//         .then(ids => ({ id: ids[0] }));
+// }
