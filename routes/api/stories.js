@@ -18,13 +18,19 @@ router.get('/byId/:id', (req, res) => {
         })
 })
 
-router.get('/byUser/:id', (req, res) => {
-    db.findStoryByUser(req.params.id)
-        .then(function (data) {
-            res.json(data);
+router.post('/new', (req, res) => {
+    const { sName, sContent, user } = req.body;
+    db.newStory({ sName, sContent, user })
+        .then(count => {
+            db.findStories(req.params.id)
+                .then(function (data) {
+                    res.json(data);
+                })
         })
-
-})
+        .catch(err => {
+            res.status(500).json(err);
+        });
+});
 
 router.post('/new', (req, res) => {
     const { sName, sContent, user } = req.body;
@@ -42,7 +48,10 @@ router.put('/update/:id', (req, res) => {
     const changes = req.body;
     db.update(id, changes)
         .then(count => {
-            res.status(200).json(count);
+            db.findStories(req.params.id)
+                .then(function (data) {
+                    res.json(data);
+                })
         })
         .catch(err => {
             res.status(500).json(err);
@@ -53,7 +62,10 @@ router.delete('/delete/:id', (req, res) => {
     const { id } = req.params;
     db.remove(id)
         .then(count => {
-            res.status(200).json({ Message: `Deleted Project #${count}` });
+            db.findStories(req.params.id)
+                .then(function (data) {
+                    res.json(data);
+                })
         });
 });
 
