@@ -13,8 +13,15 @@ router.post('/register', (req, res) => {
     const hash = bcrypt.hashSync(user.password, 12);
     user.password = hash;
     Users.add(user)
-        .then(saved => {
-            res.status(201).json(saved);
+        .then(user => {
+            const token = generateToken(user);
+            res
+                .status(200)
+                .json({
+                    message: `Welcome ${user.username}!`,
+                    token,
+                    user
+                });
         })
         .catch(error => {
             res.status(500).json(error);
