@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../data/db.js');
+const { authenticate } = require('../../auth/authentication.js');
 
 
 router.get('/', (req, res) => {
@@ -18,7 +19,7 @@ router.get('/byId/:id', (req, res) => {
         })
 })
 
-router.post('/new', (req, res) => {
+router.post('/new', authenticate, (req, res) => {
     const { sName, sContent, user } = req.body;
     db.newStory({ sName, sContent, user })
         .then(count => {
@@ -43,7 +44,7 @@ router.post('/new', (req, res) => {
         });
 });
 
-router.put('/update/:id', (req, res) => {
+router.put('/update/:id', authenticate, (req, res) => {
     const { id } = req.params;
     const changes = req.body;
     db.update(id, changes)
@@ -58,7 +59,7 @@ router.put('/update/:id', (req, res) => {
         });
 });
 
-router.delete('/delete/:id', (req, res) => {
+router.delete('/delete/:id', authenticate, (req, res) => {
     const { id } = req.params;
     db.remove(id)
         .then(count => {
