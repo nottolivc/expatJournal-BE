@@ -50,6 +50,14 @@ router.post('/login', (req, res) => {
         });
 });
 
+router.get('/:id', (req, res) => {
+    const { id } = req.params;
+    Users.findById(id)
+        .then(function (data) {
+            res.json(data);
+        })
+})
+
 router.get('/jokes', authenticate, (req, res) => {
     const requestOptions = {
         headers: { accept: 'application/json' },
