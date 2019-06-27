@@ -20,8 +20,8 @@ router.get('/byId/:id', (req, res) => {
 })
 
 router.post('/new', authenticate, (req, res) => {
-    const { sName, sContent, user, sCountry, sImage } = req.body;
-    db.newStory({ sName, sContent, user, sCountry, sImage })
+    const { sName, sContent, user, sCountry, sImageUrl } = req.body;
+    db.newStory({ sName, sContent, user, sCountry, sImageUrl })
         .then(count => {
             db.findStories(req.params.id)
                 .then(function (data) {
@@ -33,16 +33,16 @@ router.post('/new', authenticate, (req, res) => {
         });
 });
 
-router.post('/new', (req, res) => {
-    const { sName, sContent, user } = req.body;
-    db.newStory({ sName, sContent, user })
-        .then(ids => {
-            res.status(201).json(ids);
-        })
-        .catch(err => {
-            res.status(500).json(err);
-        });
-});
+// router.post('/new', (req, res) => {
+//     const { sName, sContent, user } = req.body;
+//     db.newStory({ sName, sContent, user })
+//         .then(ids => {
+//             res.status(201).json(ids);
+//         })
+//         .catch(err => {
+//             res.status(500).json(err);
+//         });
+// });
 
 router.put('/update/:id', authenticate, (req, res) => {
     const { id } = req.params;
