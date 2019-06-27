@@ -17,6 +17,17 @@ server.get('/', (req, res) => {
     `);
 });
 
+// express will serve up production assets
+// like main.js file, or main.css file
+server.use(express.static('client/build'));
+
+// express will serve up the index.html file
+// if it doesn't recognize the route
+const path = require('path');
+server.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
+
 // CODE BELOW IS FOR UPLOADING TO AWS S3 - SHOULD BE MOVED TO AN API ROUTE EVENTUALLY 
 
 aws.config.region = 'us-east-1';
