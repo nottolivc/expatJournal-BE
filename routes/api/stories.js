@@ -20,8 +20,8 @@ router.get('/byId/:id', (req, res) => {
 })
 
 router.post('/new', authenticate, (req, res) => {
-    const { sName, sContent, user } = req.body;
-    db.newStory({ sName, sContent, user })
+    const { sName, sContent, user, sCountry, sImage } = req.body;
+    db.newStory({ sName, sContent, user, sCountry, sImage })
         .then(count => {
             db.findStories(req.params.id)
                 .then(function (data) {
